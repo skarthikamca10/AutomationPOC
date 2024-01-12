@@ -1,0 +1,147 @@
+package BusinessLogic;
+
+import PageLocators.AckConfirmation;
+import PageLocators.ContactInformation;
+import PageLocators.MailingInformation;
+import PageLocators.UserInformation;
+import Utility.GlobalLogic;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class BusinessLogin {
+    public static BusinessLogin INSTANCE = new BusinessLogin();
+
+    /****************************************************************************************
+     * DESCRIPTION:This method is used to get the contactInformation page
+     * Created By:Karthika Sengottaiyan
+     * Created DATE:10 May 2021
+     * UPDATED BY:
+     * UPDATED DATE :
+     * method:contactInformation
+     * Example:
+     * /
+     ****************************************************************************************/
+    public static void contactInformation(String first_name, String last_name, String phone, String email) throws IOException {
+        PageFactory.initElements(GlobalLogic.driver, ContactInformation.class);
+        ContactInformation.firstName.sendKeys(first_name);
+        ContactInformation.lastName.sendKeys(last_name);
+        ContactInformation.phone.sendKeys(phone);
+        ContactInformation.email.sendKeys(email);
+      //  GlobalLogic.takescreenshot();
+        GlobalLogic.propertiesLoad();
+
+
+    }
+
+
+    /****************************************************************************************
+     * DESCRIPTION:This method is used to get the mailinginformation page
+     * Created By:Karthika Sengottaiyan
+     * Created DATE:10 May 2021
+     * UPDATED BY:
+     * UPDATED DATE :
+     * method:mailinginformation
+     * Example:
+     * /
+     ****************************************************************************************/
+    public static void mailinginformation(String address, String city, String state_province, String postal_code, String country) throws InterruptedException {
+        PageFactory.initElements(GlobalLogic.driver, MailingInformation.class);
+        MailingInformation.address1.sendKeys(address);
+        MailingInformation.city.sendKeys(city);
+        MailingInformation.state.sendKeys(state_province);
+        MailingInformation.postalCode.sendKeys(postal_code);
+        //Select Country using select class
+        //Select countrylist = new Select(MailingInformation.country);
+      //  countrylist.selectByValue(country);
+        //List out the countrylist and select particuler Country
+        // Using List concept
+        List<String> listofCountrieseement=MailingInformation.countryList.stream().map(WebElement::getText).collect(Collectors.toList());
+        for(String countryname:listofCountrieseement)
+        {
+            if(countryname.equalsIgnoreCase(country))
+            {
+                MailingInformation.countryList.stream().filter(It->It.getText().equalsIgnoreCase(country)).findFirst().ifPresent(WebElement::click);
+            }
+        }
+        //GlobalLogic.takescreenshot();
+       //Thread.sleep(5000);
+
+    }
+    /****************************************************************************************
+     * DESCRIPTION:This method is used to get the userInformtion page
+     * Created By:Karthika Sengottaiyan
+     * Created DATE:10 May 2021
+     * UPDATED BY:
+     * UPDATED DATE :
+     * method:userInformtion
+     * Example:
+     * /
+     ****************************************************************************************/
+    public static void userInformtion(String username, String password, String confirmpassword) throws InterruptedException {
+        PageFactory.initElements(GlobalLogic.driver, UserInformation.class);
+        UserInformation.username.sendKeys(username);
+        UserInformation.password.sendKeys(password);
+        UserInformation.confirmpassword.sendKeys(confirmpassword);
+        GlobalLogic.takescreenshot();
+        Thread.sleep(5000);
+
+    }
+    /****************************************************************************************
+     * DESCRIPTION:This method is used to submit the page
+     * Created By:Karthika Sengottaiyan
+     * Created DATE:10 May 2021
+     * UPDATED BY:
+     * UPDATED DATE :
+     * method:submitPage
+     * Example:
+     * /
+     ****************************************************************************************/
+    public static void submitPage(String submit) throws InterruptedException {
+        PageFactory.initElements(GlobalLogic.driver, UserInformation.class);
+        assert(UserInformation.submitBtn.isEnabled());
+UserInformation.submitBtn.click();
+        GlobalLogic.takescreenshot();
+        Thread.sleep(5000);
+    }
+
+    /****************************************************************************************
+     * DESCRIPTION:This method is used to get the acknowledge page
+     * Created By:Karthika Sengottaiyan
+     * Created DATE:10 May 2021
+     * UPDATED BY:
+     * UPDATED DATE :
+     * method:ackConfirmation
+     * Example:
+     * /
+     ****************************************************************************************/
+    public static void ackConfirmation() throws InterruptedException {
+        PageFactory.initElements(GlobalLogic.driver, AckConfirmation.class);
+        assert(AckConfirmation.ackconfirmation.isDisplayed());
+        String success=AckConfirmation.ackconfirmation.getText();
+        GlobalLogic.scenario.write(success);
+        GlobalLogic.takescreenshot();
+        Thread.sleep(5000);
+
+    }
+
+    public void test() {
+        List<String > countrylist = UserInformation.Countrylist.
+                stream().map(WebElement::getText)
+                .collect(Collectors.toList()); {
+for(String country:countrylist)
+{
+    System.out.println("Countr"+country);
+}
+        }
+    }
+    public static BusinessLogin getInstance() {
+        return INSTANCE;
+    }
+
+}
