@@ -7,6 +7,7 @@ import cucumber.api.java.Before;
 import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
 import net.masterthought.cucumber.Reportable;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -32,9 +33,9 @@ public class GlobalLogic {
     public static String Password;
 
     @Before
-    public void GlobalLogic(Scenario scenario) {
+    public void GlobalLogic(Scenario scenario) throws IOException {
         this.scenario = scenario;
-
+        FileUtils.deleteDirectory(new File("reports"));//To Delete Previous HTML Reports
     }
 
     @After
